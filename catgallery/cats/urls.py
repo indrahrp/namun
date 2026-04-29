@@ -6,4 +6,5 @@ app_name = 'cats'
 urlpatterns = [
     path('', views.gallery, name='gallery'),
     path('<int:pk>/', views.cat_detail, name='detail'),
+    path('health/', views.health, name='health'),
 ]
