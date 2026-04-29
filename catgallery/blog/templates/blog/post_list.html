@@ -1,0 +1,108 @@
+{% extends "blog/base_blog.html" %}
+
+{% block title %}Blog — Meow Gallery{% endblock %}
+
+{% block extra_head %}
+<style>
+  .blog-header {
+    margin-bottom: 3rem;
+    border-bottom: 1px solid rgba(212,160,23,0.2);
+    padding-bottom: 1.5rem;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .blog-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: var(--gold);
+  }
+
+  .write-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--red);
+    color: #fff;
+    padding: 0.6rem 1.4rem;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+
+  .write-btn:hover { background: #a93226; }
+
+  .post-card {
+    background: var(--brown-light);
+    border: 1px solid rgba(212,160,23,0.15);
+    border-radius: 12px;
+    padding: 1.8rem 2rem;
+    margin-bottom: 1.5rem;
+    text-decoration: none;
+    display: block;
+    color: inherit;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .post-card:hover {
+    border-color: rgba(212,160,23,0.5);
+    transform: translateY(-2px);
+  }
+
+  .post-date {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.7;
+    margin-bottom: 0.5rem;
+  }
+
+  .post-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--gold-light);
+    margin-bottom: 0.7rem;
+  }
+
+  .post-excerpt {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: rgba(245,230,200,0.6);
+  }
+
+  .empty {
+    text-align: center;
+    padding: 4rem;
+    color: rgba(245,230,200,0.3);
+  }
+
+  .empty a { color: var(--gold); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="blog-header">
+  <h1>Blog</h1>
+  <a href="{% url 'blog:write' %}" class="write-btn">+ Write Post</a>
+</div>
+
+{% if posts %}
+  {% for post in posts %}
+  <a class="post-card" href="{% url 'blog:detail' post.pk %}">
+    <p class="post-date">{{ post.created_at|date:"F j, Y" }}</p>
+    <h2 class="post-title">{{ post.title }}</h2>
+    <p class="post-excerpt">{{ post.content|truncatewords:30 }}</p>
+  </a>
+  {% endfor %}
+{% else %}
+  <div class="empty">
+    <p>No posts yet. <a href="{% url 'blog:write' %}">Write your first one!</a></p>
+  </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,432 @@
+{% extends "blog/base_blog.html" %}
+{% load static %}
+
+{% block title %}Write a Post — Blog{% endblock %}
+
+{% block extra_head %}
+<style>
+  .write-header {
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid rgba(212,160,23,0.2);
+    padding-bottom: 1.2rem;
+  }
+
+  .write-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--gold);
+  }
+
+  .write-header p {
+    font-size: 0.8rem;
+    color: rgba(245,230,200,0.45);
+    margin-top: 0.4rem;
+    letter-spacing: 1px;
+  }
+
+  label {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.7;
+    margin-bottom: 0.5rem;
+  }
+
+  input[type="text"], textarea {
+    width: 100%;
+    background: var(--brown-light);
+    border: 1px solid rgba(212,160,23,0.25);
+    border-radius: 8px;
+    color: var(--cream);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    padding: 0.8rem 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: vertical;
+  }
+
+  input[type="text"]:focus, textarea:focus {
+    border-color: rgba(212,160,23,0.6);
+  }
+
+  input[type="text"]::placeholder, textarea::placeholder {
+    color: rgba(245,230,200,0.25);
+  }
+
+  .field { margin-bottom: 1.8rem; }
+
+  /* VOICE SECTION */
+  .voice-box {
+    background: var(--brown-light);
+    border: 1px solid rgba(212,160,23,0.2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .voice-box-title {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.7;
+    margin-bottom: 1rem;
+  }
+
+  .voice-controls {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.3rem;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-mic {
+    background: var(--red);
+    color: #fff;
+  }
+
+  .btn-mic:hover { background: #a93226; }
+  .btn-mic.recording {
+    background: #e74c3c;
+    animation: pulse 1s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(231,76,60,0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(231,76,60,0); }
+  }
+
+  .btn-ai {
+    background: var(--gold);
+    color: var(--brown);
+  }
+
+  .btn-ai:hover { background: var(--gold-light); }
+  .btn-ai:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .btn-use {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid rgba(212,160,23,0.5);
+  }
+
+  .btn-use:hover { border-color: var(--gold); }
+  .btn-use:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .transcript-area {
+    min-height: 80px;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: rgba(245,230,200,0.6);
+  }
+
+  .status-bar {
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    color: rgba(245,230,200,0.4);
+    margin-bottom: 0.8rem;
+    min-height: 1.2em;
+  }
+
+  /* AI RESULT */
+  .ai-result-box {
+    display: none;
+    background: rgba(212,160,23,0.06);
+    border: 1px solid rgba(212,160,23,0.3);
+    border-radius: 10px;
+    padding: 1.2rem;
+    margin-top: 1rem;
+  }
+
+  .ai-result-label {
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .ai-result-text {
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: rgba(245,230,200,0.85);
+    white-space: pre-wrap;
+  }
+
+  .ai-result-actions {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+
+  /* SAVE BUTTON */
+  .btn-save {
+    width: 100%;
+    padding: 1rem;
+    background: var(--red);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .btn-save:hover { background: #a93226; }
+
+  .spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .no-support {
+    font-size: 0.8rem;
+    color: #e74c3c;
+    margin-top: 0.5rem;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="write-header">
+  <h1>Write a Post</h1>
+  <p>Speak your thoughts — AI will clean them up for you</p>
+</div>
+
+<form method="post" id="post-form">
+  {% csrf_token %}
+  <input type="hidden" name="raw_transcript" id="raw-transcript-hidden" />
+
+  <div class="field">
+    <label for="title">Title</label>
+    <input type="text" name="title" id="title" placeholder="What's this post about?" required />
+  </div>
+
+  <!-- VOICE BOX -->
+  <div class="voice-box">
+    <p class="voice-box-title">🎤 Voice Input</p>
+    <p class="status-bar" id="status">Click the mic button and start speaking</p>
+
+    <div class="voice-controls">
+      <button type="button" class="btn btn-mic" id="mic-btn">
+        🎤 Start Recording
+      </button>
+      <button type="button" class="btn btn-ai" id="ai-btn" disabled>
+        ✨ Improve with AI
+      </button>
+      <button type="button" class="btn btn-use" id="use-raw-btn" disabled>
+        Use as-is
+      </button>
+    </div>
+
+    <textarea
+      class="transcript-area"
+      id="transcript"
+      rows="4"
+      placeholder="Your words will appear here as you speak..."
+    ></textarea>
+
+    <!-- AI result -->
+    <div class="ai-result-box" id="ai-result-box">
+      <div class="ai-result-label">
+        ✨ AI Improved Version
+      </div>
+      <div class="ai-result-text" id="ai-result-text"></div>
+      <div class="ai-result-actions">
+        <button type="button" class="btn btn-ai" id="use-ai-btn">Use This Text</button>
+        <button type="button" class="btn btn-use" id="discard-ai-btn">Discard</button>
+      </div>
+    </div>
+    <p id="no-support" class="no-support" style="display:none">
+      ⚠️ Your browser doesn't support voice input. Please use Chrome or Edge.
+    </p>
+  </div>
+
+  <div class="field">
+    <label for="content">Post Content</label>
+    <textarea name="content" id="content" rows="10"
+      placeholder="Your final post content goes here. Use voice input above or type directly."
+      required></textarea>
+  </div>
+
+  <button type="submit" class="btn-save">Publish Post</button>
+</form>
+
+<script>
+  const micBtn = document.getElementById('mic-btn');
+  const aiBtn = document.getElementById('ai-btn');
+  const useRawBtn = document.getElementById('use-raw-btn');
+  const transcriptEl = document.getElementById('transcript');
+  const statusEl = document.getElementById('status');
+  const contentEl = document.getElementById('content');
+  const aiResultBox = document.getElementById('ai-result-box');
+  const aiResultText = document.getElementById('ai-result-text');
+  const useAiBtn = document.getElementById('use-ai-btn');
+  const discardAiBtn = document.getElementById('discard-ai-btn');
+  const rawHidden = document.getElementById('raw-transcript-hidden');
+
+  let recognition = null;
+  let isRecording = false;
+  let finalTranscript = '';
+
+  // Check browser support
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    document.getElementById('no-support').style.display = 'block';
+    micBtn.disabled = true;
+  } else {
+    recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+    recognition.onstart = () => {
+      isRecording = true;
+      micBtn.textContent = '⏹ Stop Recording';
+      micBtn.classList.add('recording');
+      statusEl.textContent = 'Listening... speak now';
+    };
+
+    recognition.onresult = (event) => {
+      let interim = '';
+      finalTranscript = '';
+      for (let i = 0; i < event.results.length; i++) {
+        if (event.results[i].isFinal) {
+          finalTranscript += event.results[i][0].transcript + ' ';
+        } else {
+          interim += event.results[i][0].transcript;
+        }
+      }
+      transcriptEl.value = finalTranscript + interim;
+    };
+
+    recognition.onend = () => {
+      isRecording = false;
+      micBtn.textContent = '🎤 Start Recording';
+      micBtn.classList.remove('recording');
+      const hasText = transcriptEl.value.trim().length > 0;
+      statusEl.textContent = hasText ? 'Recording stopped. Review or improve your text.' : 'No speech detected.';
+      aiBtn.disabled = !hasText;
+      useRawBtn.disabled = !hasText;
+    };
+
+    recognition.onerror = (e) => {
+      statusEl.textContent = 'Error: ' + e.error + '. Try again.';
+      isRecording = false;
+      micBtn.textContent = '🎤 Start Recording';
+      micBtn.classList.remove('recording');
+    };
+
+    micBtn.addEventListener('click', () => {
+      if (isRecording) {
+        recognition.stop();
+      } else {
+        finalTranscript = '';
+        transcriptEl.value = '';
+        aiResultBox.style.display = 'none';
+        recognition.start();
+      }
+    });
+  }
+
+  // Allow manual editing of transcript
+  transcriptEl.addEventListener('input', () => {
+    const hasText = transcriptEl.value.trim().length > 0;
+    aiBtn.disabled = !hasText;
+    useRawBtn.disabled = !hasText;
+    aiResultBox.style.display = 'none';
+  });
+
+  // AI improvement
+  aiBtn.addEventListener('click', async () => {
+    const text = transcriptEl.value.trim();
+    if (!text) return;
+
+    aiBtn.innerHTML = '<span class="spinner"></span> Improving...';
+    aiBtn.disabled = true;
+    statusEl.textContent = 'AI is fixing grammar and phrasing...';
+
+    try {
+      const resp = await fetch('/blog/improve/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        body: JSON.stringify({ text })
+      });
+      const data = await resp.json();
+
+      if (data.error) {
+        statusEl.textContent = 'Error: ' + data.error;
+      } else {
+        aiResultText.textContent = data.improved;
+        aiResultBox.style.display = 'block';
+        statusEl.textContent = 'AI improved your text. Review it below.';
+      }
+    } catch (e) {
+      statusEl.textContent = 'Network error. Try again.';
+    }
+
+    aiBtn.innerHTML = '✨ Improve with AI';
+    aiBtn.disabled = false;
+  });
+
+  // Use raw transcript
+  useRawBtn.addEventListener('click', () => {
+    const text = transcriptEl.value.trim();
+    if (text) {
+      rawHidden.value = text;
+      contentEl.value = text;
+      contentEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      statusEl.textContent = 'Raw transcript copied to post content.';
+    }
+  });
+
+  // Use AI version
+  useAiBtn.addEventListener('click', () => {
+    rawHidden.value = transcriptEl.value.trim();
+    contentEl.value = aiResultText.textContent;
+    aiResultBox.style.display = 'none';
+    contentEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    statusEl.textContent = 'AI-improved text copied to post content.';
+  });
+
+  // Discard AI result
+  discardAiBtn.addEventListener('click', () => {
+    aiResultBox.style.display = 'none';
+    statusEl.textContent = 'AI result discarded.';
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,171 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Meow Gallery{% endblock %}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;600&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brown: #3b1f1f;
+      --brown-light: #4a2828;
+      --gold: #d4a017;
+      --gold-light: #f0c040;
+      --red: #c0392b;
+      --cream: #f5e6c8;
+      --white: #ffffff;
+      --amber: #f5a623;
+    }
+
+    html {
+      background: var(--amber);
+      min-height: 100%;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--brown);
+      color: var(--cream);
+      min-height: 100vh;
+      max-width: 1200px;
+      margin: 2rem auto;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 3rem;
+      border-bottom: 1px solid rgba(212,160,23,0.2);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 2px;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+    .nav-search {
+      display: flex;
+      align-items: center;
+      border: 1px solid rgba(212,160,23,0.5);
+      border-radius: 30px;
+      padding: 0.35rem 1rem;
+      gap: 0.5rem;
+    }
+
+    .nav-search input {
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--cream);
+      font-size: 0.8rem;
+      width: 120px;
+    }
+
+    .nav-search input::placeholder { color: rgba(245,230,200,0.4); }
+    .nav-search svg { opacity: 0.6; }
+
+    main { width: 100%; }
+
+    footer {
+      border-top: 1px solid rgba(212,160,23,0.2);
+      padding: 1.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-social { display: flex; gap: 0.8rem; }
+
+    .footer-social a {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(212,160,23,0.5);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 0.75rem;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .footer-social a:hover { border-color: var(--gold); color: var(--gold); }
+
+    .footer-dots { display: flex; gap: 0.5rem; align-items: center; }
+    .footer-dots span {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: rgba(212,160,23,0.3);
+      display: inline-block;
+    }
+    .footer-dots span.active { background: var(--gold); }
+
+    .footer-copy { font-size: 0.75rem; color: rgba(245,230,200,0.4); }
+  </style>
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+  <nav>
+    <div class="nav-logo">🐾 Meow Gallery</div>
+    <ul class="nav-links">
+      <li><a href="{% url 'cats:gallery' %}" class="active">Home</a></li>
+      <li><a href="/blog/">Blog</a></li>
+      <li><a href="/admin/">Admin</a></li>
+    </ul>
+    <div class="nav-search">
+      <input type="text" placeholder="Search cats..." />
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </div>
+  </nav>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    <div class="footer-social">
+      <a href="#">f</a>
+      <a href="#">&#9900;</a>
+      <a href="#">in</a>
+    </div>
+    <div class="footer-dots">
+      <span class="active"></span><span></span><span></span>
+    </div>
+    <div class="footer-copy">Made with love &hearts;</div>
+  </footer>
+
+</body>
+</html>

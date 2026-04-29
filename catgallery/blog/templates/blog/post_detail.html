@@ -1,0 +1,53 @@
+{% extends "blog/base_blog.html" %}
+
+{% block title %}{{ post.title }} — Blog{% endblock %}
+
+{% block extra_head %}
+<style>
+  .back-link {
+    display: inline-block;
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 2.5rem;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+  .back-link:hover { opacity: 1; }
+
+  .post-meta {
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.6;
+    margin-bottom: 0.8rem;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    color: var(--gold-light);
+    line-height: 1.15;
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid rgba(212,160,23,0.2);
+    padding-bottom: 1.5rem;
+  }
+
+  .post-body {
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: rgba(245,230,200,0.85);
+    white-space: pre-wrap;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<a class="back-link" href="{% url 'blog:list' %}">&larr; All Posts</a>
+<p class="post-meta">{{ post.created_at|date:"F j, Y" }}</p>
+<h1>{{ post.title }}</h1>
+<div class="post-body">{{ post.content }}</div>
+{% endblock %}

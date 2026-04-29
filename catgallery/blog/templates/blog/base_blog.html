@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Blog — Meow Gallery{% endblock %}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;600&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brown: #3b1f1f;
+      --brown-light: #4a2828;
+      --gold: #d4a017;
+      --gold-light: #f0c040;
+      --red: #c0392b;
+      --cream: #f5e6c8;
+      --amber: #f5a623;
+    }
+
+    html {
+      background: var(--amber);
+      min-height: 100%;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--brown);
+      color: var(--cream);
+      min-height: 100vh;
+      max-width: 1200px;
+      margin: 2rem auto;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 3rem;
+      border-bottom: 1px solid rgba(212,160,23,0.2);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+
+    .nav-links a {
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 2px;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+    main { max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem; }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.75rem;
+      color: rgba(245,230,200,0.3);
+      border-top: 1px solid rgba(212,160,23,0.15);
+      margin-top: 4rem;
+    }
+  </style>
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <nav>
+    <a class="nav-logo" href="/">🐾 Meow Gallery</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/blog/" class="active">Blog</a></li>
+      <li><a href="/blog/write/">Write</a></li>
+      <li><a href="/admin/">Admin</a></li>
+    </ul>
+  </nav>
+
+  <main>{% block content %}{% endblock %}</main>
+
+  <footer>Made with love &hearts;</footer>
+</body>
+</html>
