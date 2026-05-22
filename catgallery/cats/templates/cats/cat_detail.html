@@ -1,41 +1,38 @@
 {% extends "cats/base.html" %}
 {% load static %}
 
-{% block title %}{{ cat.name }} — Meow Gallery{% endblock %}
+{% block title %}{{ cat.name }} — Paws &amp; Love{% endblock %}
 
 {% block extra_head %}
 <style>
   .detail-page {
-    padding: 3rem;
-    max-width: 1000px;
+    max-width: 960px;
     margin: 0 auto;
+    padding: 3rem 2rem 5rem;
   }
 
   .back-link {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    color: var(--gold);
+    gap: 0.4rem;
+    color: var(--text-muted);
     text-decoration: none;
-    font-size: 0.78rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    font-size: 0.85rem;
     margin-bottom: 2.5rem;
-    opacity: 0.7;
-    transition: opacity 0.2s;
+    transition: color 0.2s;
   }
 
-  .back-link:hover { opacity: 1; }
+  .back-link:hover { color: var(--pink); }
 
   .detail-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 4rem;
     align-items: center;
   }
 
   @media (max-width: 640px) {
-    .detail-grid { grid-template-columns: 1fr; }
+    .detail-grid { grid-template-columns: 1fr; gap: 2rem; }
   }
 
   .detail-photo-wrap {
@@ -49,9 +46,9 @@
     width: 320px; height: 320px;
     border-radius: 50%;
     overflow: hidden;
-    border: 2px solid rgba(212,160,23,0.4);
-    box-shadow: 0 0 60px rgba(0,0,0,0.4);
-    background: rgba(212,160,23,0.08);
+    border: 4px solid var(--pink-pale);
+    box-shadow: 0 0 0 8px rgba(224,90,122,0.08);
+    background: var(--pink-pale);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -63,62 +60,68 @@
     object-fit: cover;
   }
 
-  .ring {
-    position: absolute;
-    border-radius: 50%;
-    border: 1px solid rgba(212,160,23,0.2);
-  }
-
-  .ring.r1 { width: 380px; height: 380px; }
-  .ring.r2 { width: 440px; height: 440px; }
-
   .detail-info h1 {
     font-family: 'Playfair Display', serif;
+    font-style: italic;
     font-size: 3rem;
-    font-weight: 900;
-    color: var(--gold);
-    margin-bottom: 1.5rem;
+    font-weight: 700;
+    color: var(--pink);
+    margin-bottom: 0.5rem;
+  }
+
+  .cat-tagline {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .cat-tagline::before {
+    content: '♥';
+    color: var(--pink);
+    font-size: 0.8rem;
   }
 
   .info-item {
     display: flex;
     gap: 1rem;
-    margin-bottom: 0.8rem;
     align-items: baseline;
-    border-bottom: 1px solid rgba(212,160,23,0.1);
-    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 0;
   }
 
   .info-item .label {
-    font-size: 0.7rem;
-    letter-spacing: 2px;
+    font-size: 0.73rem;
     text-transform: uppercase;
-    color: rgba(245,230,200,0.4);
-    min-width: 80px;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    min-width: 75px;
+    font-weight: 500;
   }
 
   .info-item .value {
-    font-size: 0.95rem;
-    color: var(--cream);
+    font-size: 0.93rem;
+    color: var(--text);
+    font-weight: 500;
   }
 
   .detail-desc {
-    margin-top: 1.5rem;
-    line-height: 1.8;
-    color: rgba(245,230,200,0.7);
+    margin-top: 1.8rem;
     font-size: 0.95rem;
+    line-height: 1.85;
+    color: var(--text-muted);
   }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="detail-page">
-  <a class="back-link" href="{% url 'cats:gallery' %}">&larr; All Cats</a>
+  <a class="back-link" href="{% url 'cats:gallery' %}">← All Cats</a>
 
   <div class="detail-grid">
     <div class="detail-photo-wrap">
-      <div class="ring r2"></div>
-      <div class="ring r1"></div>
       <div class="detail-photo-circle">
         {% if cat.photo %}
           <img src="{{ cat.photo.url }}" alt="{{ cat.name }}" />
@@ -130,6 +133,12 @@
 
     <div class="detail-info">
       <h1>{{ cat.name }}</h1>
+
+      {% if cat.description %}
+      <div class="cat-tagline">{{ cat.description|truncatewords:8 }}</div>
+      {% elif cat.breed %}
+      <div class="cat-tagline">{{ cat.breed }}</div>
+      {% endif %}
 
       {% if cat.breed %}
       <div class="info-item">

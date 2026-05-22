@@ -7,39 +7,38 @@
 <style>
   .write-header {
     margin-bottom: 2.5rem;
-    border-bottom: 1px solid rgba(212,160,23,0.2);
+    border-bottom: 1px solid var(--border);
     padding-bottom: 1.2rem;
   }
 
   .write-header h1 {
     font-family: 'Playfair Display', serif;
     font-size: 2rem;
-    color: var(--gold);
+    color: var(--text);
   }
 
   .write-header p {
-    font-size: 0.8rem;
-    color: rgba(245,230,200,0.45);
+    font-size: 0.85rem;
+    color: var(--text-muted);
     margin-top: 0.4rem;
-    letter-spacing: 1px;
   }
 
   label {
     display: block;
-    font-size: 0.7rem;
-    letter-spacing: 2px;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
     text-transform: uppercase;
-    color: var(--gold);
-    opacity: 0.7;
+    color: var(--text-muted);
+    font-weight: 500;
     margin-bottom: 0.5rem;
   }
 
   input[type="text"], textarea {
     width: 100%;
-    background: var(--brown-light);
-    border: 1px solid rgba(212,160,23,0.25);
-    border-radius: 8px;
-    color: var(--cream);
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
     font-family: 'Inter', sans-serif;
     font-size: 0.95rem;
     padding: 0.8rem 1rem;
@@ -49,30 +48,32 @@
   }
 
   input[type="text"]:focus, textarea:focus {
-    border-color: rgba(212,160,23,0.6);
+    border-color: var(--pink);
   }
 
   input[type="text"]::placeholder, textarea::placeholder {
-    color: rgba(245,230,200,0.25);
+    color: var(--text-muted);
+    opacity: 0.6;
   }
 
   .field { margin-bottom: 1.8rem; }
 
   /* VOICE SECTION */
   .voice-box {
-    background: var(--brown-light);
-    border: 1px solid rgba(212,160,23,0.2);
-    border-radius: 12px;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
     padding: 1.5rem;
     margin-bottom: 1.8rem;
+    box-shadow: var(--shadow);
   }
 
   .voice-box-title {
-    font-size: 0.7rem;
-    letter-spacing: 2px;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
     text-transform: uppercase;
-    color: var(--gold);
-    opacity: 0.7;
+    color: var(--text-muted);
+    font-weight: 500;
     margin-bottom: 1rem;
   }
 
@@ -90,9 +91,8 @@
     gap: 0.5rem;
     padding: 0.65rem 1.3rem;
     border-radius: 30px;
-    font-size: 0.75rem;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
+    font-size: 0.78rem;
+    letter-spacing: 0.5px;
     font-weight: 600;
     border: none;
     cursor: pointer;
@@ -100,11 +100,11 @@
   }
 
   .btn-mic {
-    background: var(--red);
+    background: var(--pink);
     color: #fff;
   }
 
-  .btn-mic:hover { background: #a93226; }
+  .btn-mic:hover { background: var(--pink-dark); }
   .btn-mic.recording {
     background: #e74c3c;
     animation: pulse 1s ease-in-out infinite;
@@ -116,33 +116,33 @@
   }
 
   .btn-ai {
-    background: var(--gold);
-    color: var(--brown);
+    background: var(--pink-pale);
+    color: var(--pink-dark);
+    border: 1px solid rgba(224,90,122,0.3);
   }
 
-  .btn-ai:hover { background: var(--gold-light); }
+  .btn-ai:hover { background: rgba(224,90,122,0.15); }
   .btn-ai:disabled { opacity: 0.4; cursor: not-allowed; }
 
   .btn-use {
     background: transparent;
-    color: var(--gold);
-    border: 1px solid rgba(212,160,23,0.5);
+    color: var(--text-muted);
+    border: 1.5px solid var(--border);
   }
 
-  .btn-use:hover { border-color: var(--gold); }
+  .btn-use:hover { border-color: var(--pink); color: var(--pink); }
   .btn-use:disabled { opacity: 0.3; cursor: not-allowed; }
 
   .transcript-area {
     min-height: 80px;
     font-size: 0.88rem;
     line-height: 1.7;
-    color: rgba(245,230,200,0.6);
+    color: var(--text);
   }
 
   .status-bar {
-    font-size: 0.72rem;
-    letter-spacing: 1px;
-    color: rgba(245,230,200,0.4);
+    font-size: 0.75rem;
+    color: var(--text-muted);
     margin-bottom: 0.8rem;
     min-height: 1.2em;
   }
@@ -150,18 +150,19 @@
   /* AI RESULT */
   .ai-result-box {
     display: none;
-    background: rgba(212,160,23,0.06);
-    border: 1px solid rgba(212,160,23,0.3);
+    background: var(--pink-ultra);
+    border: 1px solid rgba(224,90,122,0.2);
     border-radius: 10px;
     padding: 1.2rem;
     margin-top: 1rem;
   }
 
   .ai-result-label {
-    font-size: 0.68rem;
-    letter-spacing: 2px;
+    font-size: 0.72rem;
+    letter-spacing: 1px;
     text-transform: uppercase;
-    color: var(--gold);
+    color: var(--pink);
+    font-weight: 600;
     margin-bottom: 0.6rem;
     display: flex;
     align-items: center;
@@ -171,7 +172,7 @@
   .ai-result-text {
     font-size: 0.9rem;
     line-height: 1.75;
-    color: rgba(245,230,200,0.85);
+    color: var(--text);
     white-space: pre-wrap;
   }
 
@@ -185,19 +186,17 @@
   .btn-save {
     width: 100%;
     padding: 1rem;
-    background: var(--red);
+    background: var(--pink);
     color: #fff;
     border: none;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    border-radius: 10px;
+    font-size: 0.88rem;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s;
   }
 
-  .btn-save:hover { background: #a93226; }
+  .btn-save:hover { background: var(--pink-dark); }
 
   .spinner {
     display: inline-block;
