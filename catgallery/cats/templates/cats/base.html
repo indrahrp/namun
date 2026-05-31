@@ -5,6 +5,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Nana Happy Cats{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}A home full of love, purrs and happy tails — meet Nana and her ten rescue cats: Timothy, Chia, Mooi, Balinese, Lolla, Puji, Leo, Rescued, Chloe &amp; Bellaa.{% endblock %}">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Nana Happy Cats">
+  <meta property="og:title" content="{% block og_title %}Nana Happy Cats — A Home Full of Love &amp; Purrs{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}A home full of love, purrs and happy tails — meet Nana and her ten rescue cats.{% endblock %}">
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'cats/img/her.png' %}">
+  <meta property="og:image:alt" content="Nana smiling on the sofa, surrounded by her cats">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter / X card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{% block twitter_title %}Nana Happy Cats — A Home Full of Love &amp; Purrs{% endblock %}">
+  <meta name="twitter:description" content="{% block twitter_description %}A home full of love, purrs and happy tails — meet Nana and her ten rescue cats.{% endblock %}">
+  <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'cats/img/her.png' %}">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
