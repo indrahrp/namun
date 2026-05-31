@@ -1,766 +1,215 @@
 {% extends "cats/base.html" %}
 {% load static %}
 
-{% block title %}Paws &amp; Love — Home{% endblock %}
-{% block nav_home %}class="active"{% endblock %}
-
-{% block extra_head %}
-<style>
-
-  /* ── HERO ── */
-  .hero {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    min-height: calc(100vh - 64px);
-    overflow: hidden;
-    background: var(--bg);
-  }
-
-  .hero-left {
-    padding: 5rem 4rem 4rem 3.5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-    z-index: 1;
-  }
-
-  .hero-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.6rem, 4.5vw, 4rem);
-    font-weight: 900;
-    line-height: 1.1;
-    color: var(--text);
-    margin-bottom: 1.4rem;
-  }
-
-  .hero-title .italic-pink {
-    font-style: italic;
-    color: var(--pink);
-    font-weight: 700;
-    display: block;
-    position: relative;
-  }
-
-  /* small heart decoration next to "with six cats" */
-  .hero-title .italic-pink::after {
-    content: '♥';
-    position: absolute;
-    right: -1.5rem;
-    top: 0.1em;
-    font-size: 0.55em;
-    font-style: normal;
-    color: var(--pink);
-    opacity: 0.6;
-  }
-
-  .hero-desc {
-    font-size: 0.95rem;
-    color: var(--text-muted);
-    line-height: 1.75;
-    margin-bottom: 2.2rem;
-    max-width: 390px;
-  }
-
-  .hero-buttons {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-bottom: 3rem;
-  }
-
-  .btn-primary {
-    background: var(--pink);
-    color: var(--white);
-    border: none;
-    padding: 0.78rem 1.8rem;
-    border-radius: 30px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: background 0.2s;
-  }
-
-  .btn-primary:hover { background: var(--pink-dark); }
-
-  .btn-outline {
-    background: transparent;
-    color: var(--text);
-    border: 1.5px solid #ddd;
-    padding: 0.78rem 1.8rem;
-    border-radius: 30px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: border-color 0.2s, color 0.2s;
-  }
-
-  .btn-outline:hover { border-color: var(--pink); color: var(--pink); }
-
-  .hero-stats {
-    display: flex;
-    gap: 2.5rem;
-  }
-
-  .stat-item {
-    display: flex;
-    align-items: center;
-    gap: 0.55rem;
-  }
-
-  .stat-icon { font-size: 1.05rem; color: var(--pink); }
-
-  .stat-number {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--text);
-    line-height: 1;
-  }
-
-  .stat-label {
-    font-size: 0.73rem;
-    color: var(--text-muted);
-    line-height: 1;
-  }
-
-  /* floating hearts in hero */
-  .hero-left-deco {
-    position: absolute;
-    pointer-events: none;
-  }
-
-  .hero-left-deco.top-right {
-    top: 2.5rem;
-    right: 2rem;
-    font-size: 1.2rem;
-    color: var(--pink);
-    opacity: 0.3;
-  }
-
-  .hero-left-deco.bottom-left {
-    bottom: 3rem;
-    left: 1.5rem;
-    font-size: 1.5rem;
-    color: var(--pink);
-    opacity: 0.2;
-  }
-
-  .hero-right {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero-right img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center top;
-    display: block;
-  }
-
-  /* floating hearts on image side */
-  .hero-img-deco {
-    position: absolute;
-    pointer-events: none;
-    color: var(--pink);
-  }
-
-  .hero-img-deco.d1 { top: 10%; left: 8%; font-size: 1.5rem; opacity: 0.5; }
-  .hero-img-deco.d2 { top: 22%; right: 12%; font-size: 0.9rem; opacity: 0.4; }
-  .hero-img-deco.d3 { bottom: 25%; left: 5%; font-size: 0.85rem; opacity: 0.35; }
-  .hero-img-deco.d4 { bottom: 12%; right: 15%; font-size: 1.3rem; opacity: 0.45; }
-
-  /* ── CONTENT WRAPPER ── */
-  .content-wrap {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 3rem;
-  }
-
-  /* ── CATEGORIES ── */
-  .categories-section {
-    padding: 3.5rem 0;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-left: 3rem;
-    padding-right: 3rem;
-  }
-
-  .cat-grid-4 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
-  }
-
-  .cat-type-card {
-    background: var(--white);
-    border-radius: 16px;
-    padding: 1.6rem;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-    transition: transform 0.2s, box-shadow 0.2s;
-    text-decoration: none;
-    color: inherit;
-    display: block;
-  }
-
-  .cat-type-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 22px rgba(224,90,122,0.12);
-  }
-
-  .cat-type-icon {
-    width: 50px; height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
-  }
-
-  .icon-daily  { background: #fde8ef; }
-  .icon-health { background: #e5f7eb; }
-  .icon-bio    { background: #ebe8fd; }
-  .icon-gen    { background: #fdf5e5; }
-
-  .cat-type-card h3 {
-    font-size: 0.92rem;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 0.35rem;
-  }
-
-  .cat-type-card p {
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    line-height: 1.6;
-    margin-bottom: 0.9rem;
-  }
-
-  .explore-link {
-    font-size: 0.78rem;
-    color: var(--pink);
-    font-weight: 500;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-  }
-
-  /* ── SECTION HEADER ── */
-  .section-wrap {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 3rem 3.5rem;
-  }
-
-  .section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1.8rem;
-  }
-
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.7rem;
-    font-weight: 700;
-    color: var(--text);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .section-link {
-    font-size: 0.83rem;
-    color: var(--pink);
-    text-decoration: none;
-    font-weight: 500;
-    transition: opacity 0.2s;
-  }
-
-  .section-link:hover { opacity: 0.75; }
-
-  /* ── CAT CARDS ── */
-  .cats-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 1.1rem;
-  }
-
-  .cat-card {
-    background: var(--white);
-    border-radius: 14px;
-    overflow: hidden;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-
-  .cat-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 26px rgba(224,90,122,0.14);
-  }
-
-  .cat-card-photo {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    overflow: hidden;
-    background: var(--pink-pale);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.8rem;
-  }
-
-  .cat-card-photo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s;
-  }
-
-  .cat-card:hover .cat-card-photo img { transform: scale(1.07); }
-
-  .cat-card-body {
-    padding: 0.85rem 0.9rem 1rem;
-  }
-
-  .cat-card-name {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-size: 0.98rem;
-    color: var(--pink);
-    margin-bottom: 0.3rem;
-  }
-
-  .cat-card-desc {
-    font-size: 0.72rem;
-    color: var(--text-muted);
-    line-height: 1.5;
-    display: flex;
-    align-items: flex-start;
-    gap: 0.25rem;
-  }
-
-  .cat-card-desc::before {
-    content: '♥';
-    color: var(--pink);
-    font-size: 0.6rem;
-    margin-top: 1px;
-    flex-shrink: 0;
-  }
-
-  .empty-state {
-    text-align: center;
-    padding: 4rem;
-    color: var(--text-muted);
-    background: var(--white);
-    border-radius: 14px;
-    border: 1px solid var(--border);
-  }
-
-  .empty-state a { color: var(--pink); }
-
-  /* ── BLOG CARDS ── */
-  .blog-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.4rem;
-  }
-
-  .blog-card {
-    background: var(--white);
-    border-radius: 14px;
-    overflow: hidden;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-
-  .blog-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 26px rgba(224,90,122,0.12);
-  }
-
-  .blog-card-img {
-    width: 100%;
-    height: 155px;
-    background: var(--pink-pale);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3rem;
-    overflow: hidden;
-    position: relative;
-  }
-
-  /* different placeholder tints per card */
-  .blog-card-img.tint-lifestyle { background: #e8f5e3; }
-  .blog-card-img.tint-care      { background: #fde8ef; }
-  .blog-card-img.tint-health    { background: #e3edf8; }
-  .blog-card-img.tint-genetics  { background: #e3edf0; }
-
-  .blog-tag {
-    position: absolute;
-    top: 0.6rem; left: 0.6rem;
-    background: var(--pink);
-    color: var(--white);
-    font-size: 0.6rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 0.2rem 0.5rem;
-    border-radius: 20px;
-  }
-
-  .blog-tag.tag-lifestyle { background: #4d9e3d; }
-  .blog-tag.tag-care      { background: #3aae6e; }
-  .blog-tag.tag-health    { background: #5a78e0; }
-  .blog-tag.tag-genetics  { background: #e0a020; }
-
-  .blog-card-body {
-    padding: 1rem 1.1rem 1.2rem;
-  }
-
-  .blog-card-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 0.98rem;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 0.45rem;
-    line-height: 1.35;
-  }
-
-  .blog-card-meta {
-    font-size: 0.72rem;
-    color: var(--text-muted);
-    margin-bottom: 0.55rem;
-  }
-
-  .blog-card-excerpt {
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    line-height: 1.6;
-    margin-bottom: 0.85rem;
-  }
-
-  .read-more {
-    font-size: 0.78rem;
-    color: var(--pink);
-    font-weight: 600;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-  }
-
-  .read-more:hover { text-decoration: underline; }
-
-  /* ── NEWSLETTER ── */
-  .newsletter-wrap {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 3rem 3.5rem;
-  }
-
-  .newsletter-section {
-    background: var(--pink-ultra);
-    border: 1px solid rgba(224,90,122,0.15);
-    border-radius: 20px;
-    padding: 2.5rem 3rem;
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .newsletter-icon {
-    font-size: 2rem;
-    flex-shrink: 0;
-    opacity: 0.8;
-  }
-
-  .newsletter-text h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--pink);
-    margin-bottom: 0.3rem;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-
-  .newsletter-text p {
-    font-size: 0.86rem;
-    color: var(--text-muted);
-    line-height: 1.6;
-    max-width: 320px;
-  }
-
-  .newsletter-form {
-    display: flex;
-    gap: 0.7rem;
-    align-items: center;
-    margin-left: auto;
-    flex-shrink: 0;
-  }
-
-  .newsletter-form input {
-    border: 1.5px solid var(--border);
-    border-radius: 30px;
-    padding: 0.7rem 1.3rem;
-    font-size: 0.85rem;
-    outline: none;
-    background: var(--white);
-    color: var(--text);
-    width: 210px;
-    font-family: 'Inter', sans-serif;
-    transition: border-color 0.2s;
-  }
-
-  .newsletter-form input:focus { border-color: var(--pink); }
-  .newsletter-form input::placeholder { color: #c5b5ba; }
-
-  .newsletter-cat-img {
-    width: 75px; height: 75px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid var(--white);
-    box-shadow: 0 2px 10px rgba(224,90,122,0.15);
-    flex-shrink: 0;
-  }
-
-  /* small decorative hearts on newsletter */
-  .nl-deco {
-    position: absolute;
-    color: var(--pink);
-    opacity: 0.2;
-    pointer-events: none;
-  }
-
-  .nl-deco.nl1 { top: 0.8rem; right: 8rem; font-size: 1.8rem; }
-  .nl-deco.nl2 { bottom: 0.8rem; left: 50%; font-size: 1.1rem; }
-
-  /* ── PAWS DECO (floating paw prints on sides) ── */
-  .paw-deco {
-    position: fixed;
-    color: var(--pink);
-    opacity: 0.06;
-    font-size: 3rem;
-    pointer-events: none;
-    user-select: none;
-    z-index: 0;
-  }
-
-  .paw-deco.left  { left: 0.5rem; top: 40%; }
-  .paw-deco.right { right: 0.5rem; top: 60%; }
-</style>
-{% endblock %}
+{% block title %}Nana Happy Cats — A Home Full of Love &amp; Purrs{% endblock %}
 
 {% block content %}
 
-<!-- floating paw prints -->
-<span class="paw-deco left">🐾</span>
-<span class="paw-deco right">🐾</span>
-
-<!-- ── HERO ── -->
-<section class="hero">
-  <div class="hero-left">
-    <span class="hero-left-deco top-right">♡</span>
-    <span class="hero-left-deco bottom-left">♡</span>
-
-    <h1 class="hero-title">
-      Life is better
-      <span class="italic-pink">with six cats</span>
-    </h1>
-
-    <p class="hero-desc">
-      A cozy corner of the internet where our 6 adorable cats,
-      daily life, and lots of love come together.
-    </p>
-
-    <div class="hero-buttons">
-      <a href="#cats" class="btn-primary">Meet Our Cats 🐾</a>
-      <a href="/blog/" class="btn-outline">Read Our Blog 📖</a>
+<!-- ===== HERO ===== -->
+<section class="hero" id="top">
+  <div class="floaties" id="floaties" aria-hidden="true"></div>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <div class="hero-eyebrow">Welcome to…</div>
+      <h1>
+        <span class="pawbig" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="var(--pink)" width="100%" height="100%"><circle cx="7" cy="9" r="2.4"/><circle cx="12" cy="6.4" r="2.4"/><circle cx="17" cy="9" r="2.4"/><ellipse cx="12" cy="16.5" rx="5" ry="4.2"/></svg>
+        </span>Nana Happy Cats
+      </h1>
+      <p class="lead">A home full of love, purrs and happy tails — where every meow has a story and ten little hearts call her Mom.</p>
+      <div class="hero-btns">
+        <a href="#cats" class="btn btn-primary">Meet the cats ♥</a>
+        <a href="#gallery" class="btn btn-ghost">See the gallery</a>
+      </div>
     </div>
 
-    <div class="hero-stats">
-      <div class="stat-item">
-        <span class="stat-icon">🐾</span>
-        <div>
-          <div class="stat-number">{{ cats|length }}</div>
-          <div class="stat-label">Lovely Cats</div>
-        </div>
+    <div class="hero-photo-wrap">
+      <div class="hero-photo">
+        <img src="{% static 'cats/img/her.png' %}" alt="The cat mom, smiling on the sofa">
       </div>
-      <div class="stat-item">
-        <span class="stat-icon">♡</span>
-        <div>
-          <div class="stat-number">100K+</div>
-          <div class="stat-label">Happy Readers</div>
-        </div>
+
+      <div class="cat-badge cb1">
+        <div class="ph"><img src="{% static 'cats/img/leo.png' %}" alt="Leo"></div>
+        <span class="tag">Leo</span>
       </div>
-      <div class="stat-item">
-        <span class="stat-icon">📷</span>
-        <div>
-          <div class="stat-number">500+</div>
-          <div class="stat-label">Cute Moments</div>
-        </div>
+      <div class="cat-badge cb2">
+        <div class="ph"><img src="{% static 'cats/img/balinese.png' %}" alt="Balinese"></div>
+        <span class="tag">Balinese</span>
+      </div>
+      <div class="cat-badge cb3">
+        <div class="ph"><img src="{% static 'cats/img/timothy.png' %}" alt="Timothy"></div>
+        <span class="tag">Timothy</span>
+      </div>
+      <div class="cat-badge cb4">
+        <div class="ph"><img src="{% static 'cats/img/bellaa.png' %}" alt="Bellaa"></div>
+        <span class="tag">Bellaa</span>
+      </div>
+
+      <div class="note-card">
+        <span class="script">Life is better with cats</span>
+        <small>Every meow has a story, and every story deserves love. 🐾</small>
       </div>
     </div>
   </div>
-
-  <div class="hero-right">
-    <img src="{% static 'cats/girlfriend.png' %}" alt="Life with cats" />
-    <span class="hero-img-deco d1">♥</span>
-    <span class="hero-img-deco d2">♡</span>
-    <span class="hero-img-deco d3">♡</span>
-    <span class="hero-img-deco d4">♥</span>
-  </div>
 </section>
 
-<!-- ── CATEGORIES ── -->
-<section class="categories-section">
-  <div class="cat-grid-4">
-    <a class="cat-type-card" href="/blog/">
-      <div class="cat-type-icon icon-daily">🐱</div>
-      <h3>Daily Life</h3>
-      <p>Stories from our everyday life with six cats.</p>
-      <span class="explore-link">Explore →</span>
-    </a>
-    <a class="cat-type-card" href="/blog/">
-      <div class="cat-type-icon icon-health">💚</div>
-      <h3>Health</h3>
-      <p>Cat health tips, care guides, and wellness advice.</p>
-      <span class="explore-link">Explore →</span>
-    </a>
-    <a class="cat-type-card" href="/blog/">
-      <div class="cat-type-icon icon-bio">🔬</div>
-      <h3>Biology</h3>
-      <p>Fun facts and deep dives into the biology of cats.</p>
-      <span class="explore-link">Explore →</span>
-    </a>
-    <a class="cat-type-card" href="/blog/">
-      <div class="cat-type-icon icon-gen">🧬</div>
-      <h3>Genetics</h3>
-      <p>Understanding cat genetics and fascinating traits.</p>
-      <span class="explore-link">Explore →</span>
-    </a>
-  </div>
-</section>
-
-<!-- ── MEET OUR CATS ── -->
-<section class="section-wrap" id="cats">
-  <div class="section-header">
-    <h2 class="section-title">Meet Our {{ cats|length }} Cats 🐾</h2>
-    <a href="{% url 'cats:gallery' %}#cats" class="section-link">View all about them →</a>
-  </div>
-
-  {% if cats %}
-  <div class="cats-grid">
-    {% for cat in cats %}
-    <a class="cat-card" href="{% url 'cats:detail' cat.pk %}">
-      <div class="cat-card-photo">
-        {% if cat.photo %}
-          <img src="{{ cat.photo.url }}" alt="{{ cat.name }}" />
-        {% else %}
-          🐱
-        {% endif %}
-      </div>
-      <div class="cat-card-body">
-        <div class="cat-card-name">{{ cat.name }}</div>
-        <div class="cat-card-desc">
-          {% if cat.description %}{{ cat.description|truncatewords:6 }}{% elif cat.breed %}{{ cat.breed }}{% else %}One of our beloved cats{% endif %}
-        </div>
-      </div>
-    </a>
-    {% endfor %}
-  </div>
-  {% else %}
-  <div class="empty-state">
-    <p>No cats yet. <a href="/admin/">Add your first cat</a> in the admin panel.</p>
-  </div>
-  {% endif %}
-</section>
-
-<!-- ── FROM OUR BLOG ── -->
-<section class="section-wrap">
-  <div class="section-header">
-    <h2 class="section-title">From Our Blog 🐾</h2>
-    <a href="/blog/" class="section-link">View all articles →</a>
-  </div>
-
-  {% if recent_posts %}
-  <div class="blog-grid">
-    {% for post in recent_posts %}
-    {% with forloop.counter as i %}
-    <a class="blog-card" href="/blog/{{ post.pk }}/">
-      <div class="blog-card-img {% if i == 1 %}tint-lifestyle{% elif i == 2 %}tint-care{% elif i == 3 %}tint-health{% else %}tint-genetics{% endif %}">
-        🐱
-        <span class="blog-tag {% if i == 1 %}tag-lifestyle{% elif i == 2 %}tag-care{% elif i == 3 %}tag-health{% else %}tag-genetics{% endif %}">
-          {% if i == 1 %}Lifestyle{% elif i == 2 %}Care{% elif i == 3 %}Health{% else %}Genetics{% endif %}
-        </span>
-      </div>
-      <div class="blog-card-body">
-        <h3 class="blog-card-title">{{ post.title }}</h3>
-        <div class="blog-card-meta">{{ post.created_at|date:"M j, Y" }} &middot; 5 min read</div>
-        <p class="blog-card-excerpt">{{ post.content|truncatewords:18 }}</p>
-        <span class="read-more">Read More →</span>
-      </div>
-    </a>
-    {% endwith %}
-    {% endfor %}
-  </div>
-  {% else %}
-  <div class="empty-state">
-    <p>No blog posts yet. <a href="/blog/write/">Write the first one!</a></p>
-  </div>
-  {% endif %}
-</section>
-
-<!-- ── NEWSLETTER ── -->
-<div class="newsletter-wrap">
-  <div class="newsletter-section">
-    <span class="nl-deco nl1">♥</span>
-    <span class="nl-deco nl2">♡</span>
-
-    <div class="newsletter-icon">💌</div>
-
-    <div class="newsletter-text">
-      <h2>Join Our Cat-Loving Community ♡</h2>
-      <p>Get cute stories, caring tips, and exclusive updates straight to your inbox.</p>
-    </div>
-
-    <div class="newsletter-form">
-      <input type="email" placeholder="Your email address" />
-      <a href="#" class="btn-primary" style="padding: 0.7rem 1.4rem; font-size: 0.85rem;">Subscribe 🐾</a>
-    </div>
-
-    {% if cats %}
-    {% with cats|first as first_cat %}
-    {% if first_cat.photo %}
-    <img class="newsletter-cat-img" src="{{ first_cat.photo.url }}" alt="Our cat" />
-    {% endif %}
-    {% endwith %}
-    {% endif %}
+<!-- ===== AMBER STRIP ===== -->
+<div class="strip">
+  <svg class="top-wave" viewBox="0 0 1200 54" preserveAspectRatio="none" fill="currentColor"><path d="M0,54 C300,0 900,0 1200,54 L1200,54 L0,54 Z"/></svg>
+  <div class="wrap strip-in">
+    <div class="strip-item"><span class="ic">🏠</span> Rescue</div>
+    <div class="strip-item"><span class="ic">💛</span> Love</div>
+    <div class="strip-item"><span class="ic">🐟</span> Feed</div>
+    <div class="strip-item"><span class="ic">🐾</span> Cuddle</div>
+    <div class="strip-item"><span class="ic">🔁</span> Repeat</div>
   </div>
 </div>
 
+<!-- ===== CATS ===== -->
+<section id="cats">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kick">the whole gang ♥</div>
+      <h2>Meet the Cats</h2>
+      <p>Ten purr-sonalities, one very loved household. Tap a heart for your favorite — and yes, you're allowed more than one.</p>
+    </div>
+    <div class="cat-grid">
+      {% for cat in cats %}
+      <article class="cat-card">
+        <div class="pic">
+          <span class="role">{{ cat.role }}</span>
+          <button class="heart-fav" aria-label="Favorite {{ cat.name }}">
+            <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.8-10-9.2C.3 8.6 1.7 5.3 5 5.3c2 0 3.2 1.3 4 2.4.8-1.1 2-2.4 4-2.4 3.3 0 4.7 3.3 3 6.5C19.5 16.2 12 21 12 21Z"/></svg>
+          </button>
+          <img src="{% static cat.img %}" alt="{{ cat.name }}" loading="lazy">
+        </div>
+        <div class="body">
+          <div class="name">{{ cat.name }}</div>
+          <p class="blurb">{{ cat.blurb }}</p>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ===== GALLERY ===== -->
+<section id="gallery">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kick">candid &amp; cozy</div>
+      <h2>The Gallery</h2>
+      <p>Naps, mischief and majestic stares. Click any photo to see it bigger.</p>
+    </div>
+    <div class="masonry" id="masonry">
+      {% for item in gallery_items %}
+      <div class="ph" data-idx="{{ forloop.counter0 }}">
+        <img src="{% static item.img %}" alt="{{ item.cap }}" loading="lazy">
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ===== LOVE QUOTE ===== -->
+<section id="love">
+  <div class="wrap">
+    <div class="big">"A house is not a home without a paw print on your heart."</div>
+    <p>Made with love, for the best cat mom in the world. 🐾💛</p>
+  </div>
+</section>
+
+<!-- ===== LIGHTBOX ===== -->
+<div class="lb" id="lb">
+  <button class="close" id="lbClose" aria-label="Close">✕</button>
+  <button class="prev" id="lbPrev" aria-label="Previous">‹</button>
+  <img id="lbImg" alt="">
+  <button class="next" id="lbNext" aria-label="Next">›</button>
+  <div class="cap" id="lbCap"></div>
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+/* ---------- GALLERY DATA ---------- */
+const GALLERY = [
+{% for item in gallery_items %}
+  {"img": "{% static item.img %}", "cap": "{{ item.cap }}"}{% if not forloop.last %},{% endif %}
+
+{% endfor %}
+];
+
+/* ---------- LIGHTBOX ---------- */
+const lb = document.getElementById('lb');
+const lbImg = document.getElementById('lbImg');
+const lbCap = document.getElementById('lbCap');
+let cur = 0;
+function openLB(i) { cur = i; lbImg.src = GALLERY[i].img; lbCap.textContent = GALLERY[i].cap; lb.classList.add('open'); }
+function step(d) { cur = (cur + d + GALLERY.length) % GALLERY.length; openLB(cur); }
+const masonry = document.getElementById('masonry');
+masonry.addEventListener('click', e => { const p = e.target.closest('.ph'); if (p) openLB(+p.dataset.idx); });
+document.getElementById('lbClose').onclick = () => lb.classList.remove('open');
+document.getElementById('lbNext').onclick = () => step(1);
+document.getElementById('lbPrev').onclick = () => step(-1);
+lb.addEventListener('click', e => { if (e.target === lb) lb.classList.remove('open'); });
+document.addEventListener('keydown', e => {
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'Escape') lb.classList.remove('open');
+  if (e.key === 'ArrowRight') step(1);
+  if (e.key === 'ArrowLeft') step(-1);
+});
+
+/* ---------- SCROLL REVEAL ---------- */
+const io = new IntersectionObserver(es => {
+  es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+}, { threshold: .15 });
+document.querySelectorAll('.cat-card').forEach((c, i) => {
+  c.style.transitionDelay = (i % 4 * 70) + 'ms';
+  io.observe(c);
+});
+
+/* ---------- FLOATING HEARTS / PAWS ---------- */
+const fl = document.getElementById('floaties');
+const glyphs = ['🐾', '💛', '♥', '🐾', '🤍'];
+function spawnFloaty() {
+  const s = document.createElement('span');
+  s.className = 'floaty';
+  s.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
+  s.style.left = Math.random() * 100 + '%';
+  s.style.bottom = '-30px';
+  s.style.fontSize = (14 + Math.random() * 22) + 'px';
+  s.style.animationDuration = (7 + Math.random() * 7) + 's';
+  fl.appendChild(s);
+  setTimeout(() => s.remove(), 14000);
+}
+if (!matchMedia('(prefers-reduced-motion:reduce)').matches) {
+  for (let i = 0; i < 6; i++) setTimeout(spawnFloaty, i * 900);
+  setInterval(spawnFloaty, 1700);
+}
+
+/* ---------- HEART BURST ---------- */
+function burstHearts(el) {
+  const r = el.getBoundingClientRect();
+  for (let i = 0; i < 7; i++) {
+    const h = document.createElement('span');
+    h.textContent = '♥';
+    h.style.cssText = `position:fixed;left:${r.left + r.width / 2}px;top:${r.top + r.height / 2}px;color:#C9746D;font-size:${12 + Math.random() * 12}px;pointer-events:none;z-index:200;transition:transform .9s ease-out,opacity .9s`;
+    document.body.appendChild(h);
+    requestAnimationFrame(() => {
+      const a = Math.random() * Math.PI * 2, d = 40 + Math.random() * 50;
+      h.style.transform = `translate(${Math.cos(a) * d}px,${Math.sin(a) * d - 30}px) rotate(${Math.random() * 60 - 30}deg)`;
+      h.style.opacity = '0';
+    });
+    setTimeout(() => h.remove(), 950);
+  }
+}
+document.querySelectorAll('.heart-fav').forEach(b => {
+  b.addEventListener('click', e => {
+    e.stopPropagation();
+    b.classList.toggle('faved');
+    if (b.classList.contains('faved')) burstHearts(b);
+  });
+});
+</script>
 {% endblock %}
