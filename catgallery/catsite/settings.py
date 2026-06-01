@@ -21,8 +21,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-zk@u(ukvjrz5^hiocv8n%
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
-if 'healthcheck.railway.app' not in ALLOWED_HOSTS:
-    ALLOWED_HOSTS.append('healthcheck.railway.app')
+for host in ['healthcheck.railway.app', 'nanamuntu.com', 'www.nanamuntu.com']:
+    if host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(host)
 
 # Railway terminates SSL and forwards X-Forwarded-Proto: https
 # This makes request.scheme return 'https' so og:image URLs are correct

@@ -60,3 +60,7 @@ The `Cat` Django model still exists for the `/cats/<pk>/` detail pages.
 
 Railway. Config in `railway.json`. Procfile starts gunicorn on port 8080.  
 Static files served by WhiteNoise. Push to `main` to deploy.
+
+**Domains:**
+- Production: `https://nanamuntu.com` (custom domain, DNS → Railway)
+- Railway default: `https://namun-production.up.railway.app`
